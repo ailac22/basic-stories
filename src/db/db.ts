@@ -13,8 +13,6 @@ export async function connectToMongo(connectionString: string): Promise<void> {
     //dbName: 'storiesExpress',
   };
 
-  console.log("voy a connect con" + connectionString)
-
   const mongoose = connect(connectionString, options)
     .then(() => console.log('done indeed'))
     .catch((e) => console.log(e));

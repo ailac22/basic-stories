@@ -5,9 +5,13 @@ import { IUser } from '@entities/User';
 import path from 'path';
 import storyRouter from './routes/storyRoutes';
 import { connectToMongo } from './db/db';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
+import compression from 'compression';
+import helmet from 'helmet'
+
 
 dotenv.config();
+
 
 const connectionString: string = process.env.MONGODB_URL as string;
 
@@ -22,7 +26,10 @@ connectToMongo(connectionString)
 
 // Boot express
 const app: Application = express();
-const port = 5000;
+const port = process.env.PORT;
+
+app.use(compression());
+app.use(helmet());
 
 const engineOptions: ExpressHandlebars.ExphbsOptions = {
   layoutsDir: `${__dirname}/views/layouts`,
