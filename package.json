@@ -12,6 +12,11 @@
   },
   "author": "ailac22",
   "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ailac22/basic-stories"
+  },
   "_moduleAliases": {
     "@routes": "build/routes",
     "@entities": "build/entities",
