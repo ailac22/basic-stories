@@ -1,0 +1,30 @@
+<script>
+  $(document).ready(function(){
+      $('.fixed-action-btn').floatingActionButton();
+  })
+</script>
+
+<br/>
+<h3>Your stories</h3>
+<div>
+{{#each stories}}
+<div class="card">
+    <div class="card-content">
+        <h5 class="card-title">{{this.title}}</h5> 
+        <p class="">{{this.content}}</p>
+    </div>
+    <div class="card-action">
+        <button class="waves-effect waves-light btn"><i class="material-icons">edit</i></button>
+        <button class="waves-effect waves-light btn red"><i class="material-icons">delete</i></button>
+    </div>
+</div>
+{{/each}}
+</div>
+<!-- create button -->
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large red" href="/add">
+    <i class="large material-icons">add</i>
+  </a>    
+</div>
+
+
