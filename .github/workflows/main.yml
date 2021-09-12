@@ -28,3 +28,10 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test --if-present
+    - name: Deploy to Heroku
+      uses: AkhileshNS/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_USER_PASSWORD }}
+        heroku_app_name: "still-mesa-52798" #Must be unique in Heroku
+        heroku_email: ${{ secrets.HEROKU_USER_AILAC }}
+
