@@ -3,62 +3,80 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import ExpressHandlebars from 'express-handlebars';
 import { IUser } from '@entities/User';
 import path from 'path';
-import storyRouter from './routes/storyRoutes';
-import { connectToMongo } from './db/db';
 import dotenv from 'dotenv';
 import compression from 'compression';
-import helmet from 'helmet'
-
+import helmet from 'helmet';
+import { mongo, Mongoose } from 'mongoose';
+import cors from 'cors';
+import { connectToMongo } from './db/db';
+import storyRouter from './routes/storyRoutes';
+import loginRouter from './routes/loginRoutes';
+import setAuth from './middleware/Auth/auth';
 
 dotenv.config();
 
-
 const connectionString: string = process.env.MONGODB_URL as string;
 
-connectToMongo(connectionString)
-  .then(() => console.log('done'))
-  .catch((err) => console.error(err));
+const connection = connectToMongo(connectionString);
 
-// UserModel.find((err,users) => {
-//     const u: IUser = users[0];
-//     console.log(`mongoose gives ${u}`)
-// });
+connection.then((connection: Mongoose) => {
+  // UserModel.find((err,users) => {
+  //     const u: IUser = users[0];
+  //     console.log(`mongoose gives ${u}`)
+  // });
 
-// Boot express
-const app: Application = express();
-const port = process.env.PORT;
+  // Boot express
+  const app: Application = express();
+  const port = process.env.PORT;
 
-app.use(compression());
-app.use(helmet());
+  setAuth(app);
 
-const engineOptions: ExpressHandlebars.ExphbsOptions = {
-  layoutsDir: `${__dirname}/views/layouts`,
-  partialsDir: `${__dirname}/views/partials`,
-  defaultLayout: 'index',
-};
+  app.use(compression());
+  app.use(helmet());
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+  app.use(
+    helmet.contentSecurityPolicy({
+      useDefaults: true,
+      directives: {
+        'script-src': ["'self'", 'https://cdnjs.cloudflare.com/'],
+        'style-src': ["'self'", 'https://cdnjs.cloudflare.com/', 'https://fonts.googleapis.com'],
+      },
+    }),
+  );
 
-const viewsDir = path.join(__dirname, 'views');
-app.set('views', viewsDir);
+  const engineOptions: ExpressHandlebars.ExphbsOptions = {
+    layoutsDir: `${__dirname}/views/layouts`,
+    partialsDir: `${__dirname}/views/partials`,
+    defaultLayout: 'index',
+  };
 
-app.set('view engine', 'handlebars');
-app.engine('handlebars', ExpressHandlebars(engineOptions));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static('public'));
+  const viewsDir = path.join(__dirname, 'views');
+  app.set('views', viewsDir);
 
-// Application routing
-// app.use('/', (req: Request, res: Response, next: NextFunction) => {
-//   res.status(200).send({ data: 'Hello from Ornio AS' });
-// });
+  app.set('view engine', 'handlebars');
+  app.engine('handlebars', ExpressHandlebars(engineOptions));
 
-app.use('/', storyRouter);
+  app.use(express.static('public'));
 
-// app.get('/', (req, res) => {
-//   //Serves the body of the page aka "main.handlebars" to the container //aka "index.handlebars"
-//   res.render('main', {layout : 'index'});
-//   });
+  // Application routing
+  // app.use('/', (req: Request, res: Response, next: NextFunction) => {
+  //   res.status(200).send({ data: 'Hello from Ornio AS' });
+  // });
 
-// Start server
-app.listen(port, () => console.log(`Server is listening on port ${port}!`));
+  app.use('/', storyRouter);
+  app.use('/', loginRouter);
+  app.get('*', (req: Request, res: Response, next: NextFunction) => {
+    res.status(404).send('<h1>Resource not found</h1>');
+  });
+
+  // app.get('/', (req, res) => {
+  //   //Serves the body of the page aka "main.handlebars" to the container //aka "index.handlebars"
+  //   res.render('main', {layout : 'index'});
+  //   });
+
+  // Start server
+  app.listen(port, () => console.log(`Server is listening on port ${port}!`));
+});

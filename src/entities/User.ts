@@ -1,6 +1,8 @@
 export interface IUser {
   id?: number;
   name: string;
+  hash: string;
+  salt: string;
 }
 
 // class User implements IUser {

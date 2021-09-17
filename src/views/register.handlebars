@@ -1,0 +1,30 @@
+
+<h1>Sign up</h1>
+
+
+
+<div class="row">
+{{#if loginError}} 
+<div class="col s6 offset-l3">
+    <div class="error">{{ loginErrorMsg }}</div>
+</div>
+{{/if}}
+</div>
+<div class="row">
+    <div class="col l6 offset-l3">
+        <div class="row">
+            <form method="POST">
+                <div class="input-field">
+                    <label class="active" for="title">Username: </label>
+                    <input id="username" name="username" type="text">
+                </div>
+                <div class="input-field">
+                    <label class="active" for="password">Password: </label>
+                    <input id="password" name="password" type="password">
+                </div>
+                <input type="submit" class="btn" value="Register" />
+            </form>
+        </div>
+    </div>
+</div>
+</div> 

@@ -15,37 +15,30 @@ const storyDao: IStoryDao = new StoryDao();
 // class StoryController:
 
 export default class StoryController {
+  public createDialog(req: Request, res: Response, next: NextFunction) {
 
-  
-
-  public createDialog(req: Request, res: Response, next: NextFunction){
-
-    
-    res.render('create.handlebars', { layout: 'index' });
-
+    if (req.isAuthenticated())
+      res.render('create.handlebars', { layout: 'index' });
+    else
+      res.redirect("/login");
   }
 
   public async createStory(req: Request, res: Response, next: NextFunction) {
-
-
-    console.log(req.body);
-    console.log("someone sent!");
-
     await storyDao.add(req.body);
-    
+
     // res.send(`created ${story}`);
 
     res.redirect('/');
-
   }
 
   public async getStories(req: Request, res: Response) {
     const stories = await storyDao.getAll();
 
-    console.log("req" + req);
-    res.render('stories', { stories });
-
-
+    console.log("is auth " + req.isAuthenticated())
+    if (req.isAuthenticated())
+      res.render('stories', { stories });
+    else
+      res.redirect("/login");
   }
 }
 

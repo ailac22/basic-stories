@@ -1,0 +1,15 @@
+
+$alertColor: #f44336;
+
+.error {
+
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: #f44336;
+    border: 1px solid darken($alertColor,15%);
+    text-align: center;
+    color: white;
+    font: {
+        weight: bold;
+    }
+}
