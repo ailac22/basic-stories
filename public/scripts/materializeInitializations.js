@@ -1,6 +1,4 @@
-'use strict'
-
-// document.addEventListener("DOMContentLoaded", function() {
-//     //$('.fixed-action-btn').floatingActionButton();
-//     console.log("hola")
-//   });
+document.addEventListener("DOMContentLoaded", function() {
+  $('.fixed-action-btn').floatingActionButton();
+  $('.modal').modal();
+});

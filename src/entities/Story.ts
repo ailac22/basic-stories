@@ -1,5 +1,7 @@
+import { Mongoose, ObjectId } from 'mongoose';
+
 export interface IStory {
-  id?: number;
+  _id?: string;
   title: string;
   content: string;
 }

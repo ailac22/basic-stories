@@ -19,15 +19,15 @@ loginRouter.post(
   },
 );
 
-
 loginRouter.get('/register', loginController.registerPage);
-loginRouter.post('/register',
-body('username').not().isEmail().withMessage('Username must not be an email'),
-body('username').not().isEmpty().withMessage('Username must not be empty'),
-body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+loginRouter.post(
+  '/register',
+  body('username').not().isEmail().withMessage('Username must not be an email'),
+  body('username').not().isEmpty().withMessage('Username must not be empty'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
 
-loginController.registerPageValidation,
- loginController.onRegister);
-
+  loginController.registerPageValidation,
+  loginController.onRegister,
+);
 
 export default loginRouter;

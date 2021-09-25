@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 import compression from 'compression';
 import helmet from 'helmet';
 import { mongo, Mongoose } from 'mongoose';
-import cors from 'cors';
+import methodOverride from 'method-override';
 import { connectToMongo } from './db/db';
 import storyRouter from './routes/storyRoutes';
 import loginRouter from './routes/loginRoutes';
@@ -34,12 +34,20 @@ connection.then((connection: Mongoose) => {
   app.use(compression());
   app.use(helmet());
 
+  app.use(methodOverride('_method'));
+
+  // TODO: Intentar quitar el 'unsafe-inline'
   app.use(
     helmet.contentSecurityPolicy({
       useDefaults: true,
       directives: {
         'script-src': ["'self'", 'https://cdnjs.cloudflare.com/'],
-        'style-src': ["'self'", 'https://cdnjs.cloudflare.com/', 'https://fonts.googleapis.com'],
+        'style-src': [
+          "'self'",
+          'https://cdnjs.cloudflare.com/',
+          'https://fonts.googleapis.com',
+          "'unsafe-inline'",
+        ],
       },
     }),
   );

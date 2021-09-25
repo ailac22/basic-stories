@@ -16,11 +16,8 @@ const storyDao: IStoryDao = new StoryDao();
 
 export default class StoryController {
   public createDialog(req: Request, res: Response, next: NextFunction) {
-
-    if (req.isAuthenticated())
-      res.render('create.handlebars', { layout: 'index' });
-    else
-      res.redirect("/login");
+    if (req.isAuthenticated()) res.render('create.handlebars', { layout: 'index' });
+    else res.redirect('/login');
   }
 
   public async createStory(req: Request, res: Response, next: NextFunction) {
@@ -34,11 +31,18 @@ export default class StoryController {
   public async getStories(req: Request, res: Response) {
     const stories = await storyDao.getAll();
 
-    console.log("is auth " + req.isAuthenticated())
-    if (req.isAuthenticated())
-      res.render('stories', { stories });
-    else
-      res.redirect("/login");
+    console.log('available stories');
+    console.log(stories);
+    if (req.isAuthenticated()) res.render('stories', { stories });
+    else res.redirect('/login');
+  }
+
+  public async deletestory(req: Request, res: Response) {
+    if (req.isAuthenticated()) {
+      await storyDao.delete(req.params.storyId);
+      res.redirect('/');
+
+    } else res.redirect('/login');
   }
 }
 
