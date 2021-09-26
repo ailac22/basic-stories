@@ -15,6 +15,11 @@ export default class LoginController {
     res.render('login.handlebars', { loginFailed: req.query.loginFailed });
   }
 
+  public logout(req: Request, res: Response, next: NextFunction) {
+    req.logout();
+    res.redirect('/login');
+  }
+
   public async registerPage(req: Request, res: Response, next: NextFunction) {
     res.render('register.handlebars');
   }

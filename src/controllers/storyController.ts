@@ -41,7 +41,6 @@ export default class StoryController {
     if (req.isAuthenticated()) {
       await storyDao.delete(req.params.storyId);
       res.redirect('/');
-
     } else res.redirect('/login');
   }
 }
