@@ -4,6 +4,9 @@ export interface IStory {
   _id?: string;
   title: string;
   content: string;
+  author: string;
+  // isPublic: boolean;
+  // createdAt: Date;
 }
 
 // export class Story implements IStory {

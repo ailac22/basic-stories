@@ -19,9 +19,8 @@ loginRouter.post(
   },
 );
 
-//TODO: Make logout a POST request
+// TODO: Make logout a POST request
 loginRouter.get('/logout', loginController.logout);
-
 
 loginRouter.get('/register', loginController.registerPage);
 loginRouter.post(

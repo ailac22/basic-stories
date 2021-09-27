@@ -1,6 +1,7 @@
-import type { IStory } from '@entities/Story';
+import { IStory } from '@entities/Story';
+import { IUser } from '@entities/User';
 import { StoryModel } from '@db/Models/StoryModel';
-import { Query } from 'mongoose';
+import { Query, ObjectId } from 'mongoose';
 
 export interface IStoryDao {
   // getOne: (email: string) => Promise<IUser | null>;
@@ -8,6 +9,7 @@ export interface IStoryDao {
   add: (story: IStory) => Promise<IStory>;
   update: (story: IStory) => Promise<void>;
   delete: (id: string) => Promise<IStory>;
+  getUserStories: (userid: string) => Promise<IStory[]>;
 }
 
 export class StoryDao implements IStoryDao {
@@ -35,6 +37,14 @@ export class StoryDao implements IStoryDao {
   public async delete(id: string): Promise<IStory> {
     // TODO
     return StoryModel.findByIdAndDelete(id).lean();
+  }
+
+  public async getUserStories(userid: string): Promise<IStory[]> {
+
+    console.log("last chance!");
+    console.log(userid);
+    const userStories = StoryModel.find({ 'author': `${userid}` }).lean();
+    return userStories;
   }
 
   public async getAll(): Promise<IStory[]> {

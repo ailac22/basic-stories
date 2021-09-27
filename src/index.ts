@@ -13,6 +13,12 @@ import storyRouter from './routes/storyRoutes';
 import loginRouter from './routes/loginRoutes';
 import setAuth from './middleware/Auth/auth';
 
+declare global {
+  namespace Express {
+    interface User extends IUser { }
+  }
+}
+
 dotenv.config();
 
 const connectionString: string = process.env.MONGODB_URL as string;
@@ -46,7 +52,7 @@ connection.then((connection: Mongoose) => {
           "'self'",
           'https://cdnjs.cloudflare.com/',
           'https://fonts.googleapis.com',
-          "'unsafe-inline'",
+          "'unsafe-inline'", // de momento materialize no funciona sin el inline
         ],
       },
     }),
@@ -57,6 +63,7 @@ connection.then((connection: Mongoose) => {
     partialsDir: `${__dirname}/views/partials`,
     defaultLayout: 'index',
   };
+
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -73,6 +80,7 @@ connection.then((connection: Mongoose) => {
   // app.use('/', (req: Request, res: Response, next: NextFunction) => {
   //   res.status(200).send({ data: 'Hello from Ornio AS' });
   // });
+
 
   app.use('/', storyRouter);
   app.use('/', loginRouter);

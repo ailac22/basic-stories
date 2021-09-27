@@ -8,6 +8,7 @@ import { ConnectMongoOptions } from 'connect-mongo/build/main/lib/MongoStore';
 import { UserModel } from '@db/Models/UserModel';
 import { IUser } from '@entities/User';
 import { Schema, model, connect, ConnectOptions, Mongoose, ObjectId } from 'mongoose';
+import { Request, Response, NextFunction } from 'express';
 
 function validPassword(password: string, hash: string, salt: string) {
   const hashVerify = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
@@ -32,7 +33,7 @@ export default function setAuth(app: Application) {
   );
 
   Passport.use(
-    new Strategy(function (username: string, password: string, cb) {
+    new Strategy(function(username: string, password: string, cb) {
       UserModel.findOne({ name: username })
         .then((user: IUser | null) => {
           if (!user) {
@@ -53,12 +54,12 @@ export default function setAuth(app: Application) {
     }),
   );
 
-  Passport.serializeUser<ObjectId>(function (user: any, cb: (err: any, id?: ObjectId) => void) {
+  Passport.serializeUser<ObjectId>(function(user: any, cb: (err: any, id?: ObjectId) => void) {
     cb(null, user.id);
   });
 
-  Passport.deserializeUser<ObjectId>(function (id: ObjectId, cb) {
-    UserModel.findById(id, function (err: any, user: IUser): void {
+  Passport.deserializeUser<ObjectId>(function(id: ObjectId, cb) {
+    UserModel.findById(id, function(err: any, user: IUser): void {
       if (err) {
         return cb(err);
       }
@@ -68,4 +69,14 @@ export default function setAuth(app: Application) {
 
   app.use(Passport.initialize());
   app.use(Passport.session());
+}
+
+export function ensureAuthentication(req: Request, res: Response, next: NextFunction) {
+
+  if (req.isAuthenticated()) {
+    next();
+  }
+  else {
+    res.redirect("/login");
+  }
 }
