@@ -1,5 +1,7 @@
+import { Mongoose, ObjectId, Schema } from 'mongoose';
+
 export interface IUser {
-  _id?: string;
+  _id?: Schema.Types.ObjectId;
   name: string;
   hash: string;
   salt: string;

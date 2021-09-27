@@ -3,6 +3,7 @@ import { StoryDao, IStoryDao } from '@daos/Story/StoryDao';
 import { IStory } from '@entities/Story';
 import { IUser } from '@entities/User';
 // import _ from 'lodash';
+import { Schema } from 'mongoose';
 
 
 const storyDao: IStoryDao = new StoryDao();
@@ -33,7 +34,7 @@ export default class StoryController {
 
       console.log("is authenticated");
 
-      const id = user._id as string;
+      const id = user._id as Schema.Types.ObjectId;
       const story: IStory = { author: id, ...req.body };
       console.log('story to be added');
 
@@ -48,7 +49,7 @@ export default class StoryController {
   public async getStories(req: Request, res: Response) {
 
     if (req.isAuthenticated()) {
-      let id = req.user._id as string;
+      let id = req.user._id as Schema.Types.ObjectId;
       console.log("id");
       console.log(id);
 

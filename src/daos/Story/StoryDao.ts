@@ -1,7 +1,7 @@
 import { IStory } from '@entities/Story';
 import { IUser } from '@entities/User';
 import { StoryModel } from '@db/Models/StoryModel';
-import { Query, ObjectId } from 'mongoose';
+import { Query, ObjectId, Schema } from 'mongoose';
 
 export interface IStoryDao {
   // getOne: (email: string) => Promise<IUser | null>;
@@ -9,7 +9,7 @@ export interface IStoryDao {
   add: (story: IStory) => Promise<IStory>;
   update: (story: IStory) => Promise<void>;
   delete: (id: string) => Promise<IStory>;
-  getUserStories: (userid: string) => Promise<IStory[]>;
+  getUserStories: (userid: Schema.Types.ObjectId) => Promise<IStory[]>;
 }
 
 export class StoryDao implements IStoryDao {
@@ -39,11 +39,11 @@ export class StoryDao implements IStoryDao {
     return StoryModel.findByIdAndDelete(id).lean();
   }
 
-  public async getUserStories(userid: string): Promise<IStory[]> {
+  public async getUserStories(userid: Schema.Types.ObjectId): Promise<IStory[]> {
 
     console.log("last chance!");
     console.log(userid);
-    const userStories = StoryModel.find({ 'author': `${userid}` }).lean();
+    const userStories = StoryModel.find({ 'author': userid }).lean();
     return userStories;
   }
 

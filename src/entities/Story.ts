@@ -1,10 +1,10 @@
-import { Mongoose, ObjectId } from 'mongoose';
+import { Mongoose, ObjectId, Schema } from 'mongoose';
 
 export interface IStory {
-  _id?: string;
+  _id?: Schema.Types.ObjectId;
   title: string;
   content: string;
-  author: string;
+  author: Schema.Types.ObjectId;
   // isPublic: boolean;
   // createdAt: Date;
 }
